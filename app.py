@@ -42,12 +42,14 @@ retriever=docsearch.as_retriever(search_type="similarity",search_kwargs={"k":1})
 llm = Together(model="mistralai/Mistral-7B-Instruct-v0.1",temperature=0.5,
     max_tokens=512,)
 
+
 prompt=ChatPromptTemplate.from_messages(
     [
     ("system",system_prompt),
     ("human","{input}"),
     ]
 )
+
 
 question_answer_chain=create_stuff_documents_chain(llm,prompt)
 rag_chain=create_retrieval_chain(retriever,question_answer_chain)
@@ -60,6 +62,7 @@ def chat():
     msg = request.form["msg"]
     input = msg
     print(input)
+    
     
     response = rag_chain.invoke({"input": msg})
     full_answer = response["answer"]
